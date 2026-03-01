@@ -1,0 +1,34 @@
+Average latency measurements:
+    US-Central /register Average: 30.24 ms
+    US-Central /list Average: 38.59 ms
+    Europe-West /register Average: 336.83 ms
+    Europe-West /list Average: 377.81 ms
+
+Eventual consistency experiment:
+    Trial 1: FOUND
+    Trial 2: FOUND
+    Trial 3: FOUND
+    Trial 4: FOUND
+    Trial 5: FOUND
+    Trial 6: FOUND
+    Trial 7: FOUND
+    Trial 8: FOUND
+    Trial 9: FOUND
+    Trial 10: FOUND
+
+    Final Consistency Results:
+    Total Trials: 10
+    Total Misses: 0
+    Accuracy Rate: 100.0%
+
+The latency test results are overall expected. The US-Central instance saw much lower average times 
+because the Firestore database is physically located in the same region (us-central1). Meanwhile, the 
+Europe instance experienced 10 times as much latency because server operations have to cross the Atlantic 
+Ocean (and back) to communicate with the us-central database. So, even though the two instances used the 
+same code, a lack of proximity to the source of data can be an obstacle in global applications.
+
+The consistency experiment results initially surprised me; eventual consistency was expected due to the
+architecture, but there weren't any misses even after 100 iterations. To catch a consistency miss, the EU 
+read request must arrive at the database before the US write request. However,the Python request library is 
+synchronous; so my script waits for the write to be successful before attempting the read, which is enough 
+time for Google to internally synchronize the data. The script was too slow to observe the stale state. 

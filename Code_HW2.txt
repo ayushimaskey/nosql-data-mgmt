@@ -1,0 +1,7 @@
+I made a Python script using the requests, time, and uuid libraries to implement the latency and consistency tests. 
+
+For Part IV-A, the script runs 10 iterations of a read/write for each endpoint (/list and /register) for both the EU and US instances. It uses the time.time() function at the start and end to capture how long the process took. 
+It's then converted to milliseconds, appended to a list, then averaged once 10 iterations are up.
+
+For the eventual consistency test, I generate a random user like "user_[number]," send a POST to the US instance /register endpoint, then immediately GET from the EU instance /list endpoint. 
+If the user isn't found in the list from EU, a count is incremented. This is repeated 10 times. 
